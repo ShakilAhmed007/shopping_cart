@@ -8,7 +8,6 @@ export default function Home() {
 
   useEffect(() => {
     ProductApi.getProducts().then(res => {
-      console.log(res.data);
       setProduct(res.data);
     })
   }, [])
@@ -22,7 +21,6 @@ export default function Home() {
           />
         }
     </div>
-        <CartIcon />  
     </div>
   )
 }

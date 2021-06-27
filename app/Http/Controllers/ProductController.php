@@ -25,17 +25,22 @@ class ProductController extends Controller
       return response('db save from first hit');
     } else {
       foreach ($existItems as $existItem) {
-       if($existItem->product_id != json_decode($request->data)){
-        //  laradump()->dump(json_decode($existItem->product_id));
-        MyCart::create([
-          'product_id' => $request->data,
-          'user_id' => 1,
-        ]);
-        return response('db save from second hit');
-       }else{
-         return response(['error' => 'product exist!']);
-       }
+        if ($existItem->product_id != json_decode($request->data)) {
+          //  laradump()->dump(json_decode($existItem->product_id));
+          MyCart::create([
+            'product_id' => $request->data,
+            'user_id' => 1,
+          ]);
+          return response('db save from second hit');
+        } else {
+          return response(['error' => 'product exist!']);
+        }
       }
     }
+  }
+
+  public function CountCartItems()
+  {
+    return MyCart::count();
   }
 }
