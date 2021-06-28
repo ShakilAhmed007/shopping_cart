@@ -19,6 +19,7 @@ function App() {
 					<Route exact path='/my-cart'>
 						<MyCart />
 					</Route>
+
 				</Switch>
 			</Router>
 		</div>

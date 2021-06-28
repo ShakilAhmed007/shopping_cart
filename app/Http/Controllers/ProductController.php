@@ -43,4 +43,15 @@ class ProductController extends Controller
   {
     return MyCart::count();
   }
+
+  public function cartItems()
+  {
+    // laradump()->dump(MyCart::join('products', 'my_carts.product_id', 'products.id')->get());
+
+  //  return MyCart::join('products', 'my_carts.product_id', 'products.id')->get();
+  $products = MyCart::where('user_id', 1)->get();
+  $products->load('product');
+  return response()->json($products);
+
+  }
 }

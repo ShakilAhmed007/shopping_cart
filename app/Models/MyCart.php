@@ -12,4 +12,9 @@ class MyCart extends Model
         'product_id',
         'user_id'
     ];
+
+    public function product()
+    {
+        return $this->hasOne(Product::class, 'id', 'product_id');
+    }
 }

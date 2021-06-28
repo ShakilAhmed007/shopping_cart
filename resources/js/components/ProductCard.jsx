@@ -98,7 +98,7 @@ function ProductCard({ products }) {
                     </div>
                 </div>
                 {/* cart icon */}
-                <CartIcon cartItemsCount={countCartItems} />
+                <CartIcon  cartItemsCount={countCartItems} />
             </div>
         );
     });

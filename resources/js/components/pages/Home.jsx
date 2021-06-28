@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from 'react'
 import ProductCard from '../ProductCard'
-import CartIcon from './CartIcon'
 import ProductApi from '../../Api/ProductApi';
 
 export default function Home() {
