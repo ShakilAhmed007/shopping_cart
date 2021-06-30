@@ -46,12 +46,26 @@ class ProductController extends Controller
 
   public function cartItems()
   {
-    // laradump()->dump(MyCart::join('products', 'my_carts.product_id', 'products.id')->get());
-
-  //  return MyCart::join('products', 'my_carts.product_id', 'products.id')->get();
   $products = MyCart::where('user_id', 1)->get();
   $products->load('product');
   return response()->json($products);
 
   }
+
+  public function cartItemIncrement(Request $request)
+  {
+    $myCart = MyCart::find($request->id);
+    $myCart->quantitie = $request->quantitie;
+    $myCart->save();
+    return response(['message' => 'quantitie updated!']);
+  }
+
+  public function cartItemDcrement(Request $request)
+  {
+    $myCart = MyCart::find($request->id);
+    $myCart->quantitie = $request->quantitie;
+    $myCart->save();
+    return response(['message' => 'quantitie updated!']);
+  }
+
 }

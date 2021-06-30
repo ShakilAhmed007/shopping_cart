@@ -1,22 +1,45 @@
+
 import React, { useEffect, useState } from 'react'
 import ProductApi from '../../Api/ProductApi'
 
 function MyCart() {
   const [products, setProducts] = useState();
-  // const [quantitie, setQuantitie] = useState();
   //get all product user have on cart
-  useEffect(async () => {
-    await ProductApi.getCartItems().then(res => {
+  useEffect( () => {
+    ProductApi.getCartItems().then(res => {
       console.log(res.data);
       setProducts(res.data);
     })
   }, []);
 
-  const handleQuantitie = (e) => {
-    let quantitie = e.target.value;
-    console.log(quantitie);
+
+  const handleAddProduct = (index) => {
+    let newData = [...products];
+    newData[index].quantitie++;
+    setProducts(newData);
+    let newQuantitie = products[index].quantitie;
+    let id = products[index].id;
+    ProductApi.setCartItemIncrement(newQuantitie, id).then((res) => {
+      console.log(res);
+    })
+
   }
 
+  const handleRemoveProduct = (index) => {
+    let newData = [...products];
+    if(newData[index].quantitie > 1){
+      newData[index].quantitie--;
+    }
+    setProducts(newData);
+
+    let newQuantitie = products[index].quantitie;
+    let id = products[index].id;
+    ProductApi.setCartItemIncrement(newQuantitie, id).then((res) => {
+      console.log(res);
+    })
+
+
+  }
 
 
   return (
@@ -41,7 +64,7 @@ function MyCart() {
 
                 {
                   products &&
-                  products.map(product => {
+                  products.map((product, index) => {
                     return (
                       <tr key={product.id}>
                         <td className="hidden pb-4 md:table-cell">
@@ -52,7 +75,7 @@ function MyCart() {
                         <td>
                           <a href="#">
                             <p className="mb-2 md:ml-4">{product.product.title}</p>
-                            <form action method="POST">
+                            <form method="POST">
                               <button type="submit" className="text-gray-700 md:ml-4">
                                 <small>(Remove item)</small>
                               </button>
@@ -62,9 +85,9 @@ function MyCart() {
                         <td className="justify-center md:justify-end md:flex mt-6">
                           <div className="w-20 h-10">
                             <div className="relative flex flex-row w-full h-8">
-                              <button className="bg-gray-700 px-2 hover:bg-gray-600 text-gray-100 font-bold">-</button>
-                              <input type="number" id={product.id} onChange={(e) => handleQuantitie(e)} value={product.quantitie} className="w-full font-semibold text-center text-gray-700 bg-gray-200 outline-none focus:outline-none hover:text-black focus:text-black" />
-                              <button  className="bg-gray-700 px-2 hover:bg-gray-600 text-gray-100 font-bold">+</button>
+                              <button onClick={() => handleRemoveProduct(index)} className="bg-gray-700 px-2 hover:bg-gray-600 text-gray-100 font-bold">-</button>
+                              <input readOnly type="number" id={product.id} value={product.quantitie} onChange={(e) => handleQuantitie(e)} className="w-full font-semibold text-center text-gray-700 bg-gray-200 outline-none focus:outline-none hover:text-black focus:text-black" />
+                              <button onClick={() => handleAddProduct(index)} className="bg-gray-700 px-2 hover:bg-gray-600 text-gray-100 font-bold">+</button>
                             </div>
                           </div>
                         </td>
@@ -95,11 +118,11 @@ function MyCart() {
                 <div className="p-4">
                   <p className="mb-4 italic">If you have a coupon code, please enter it in the box below</p>
                   <div className="justify-center md:flex">
-                    <form action method="POST">
+                    <form  method="POST">
                       <div className="flex items-center w-full h-13 pl-3 bg-white bg-gray-100 border rounded-full">
                         <input type="coupon" name="code" id="coupon" placeholder="Apply coupon" defaultValue="90off" className="w-full bg-gray-100 outline-none appearance-none focus:outline-none active:outline-none" />
                         <button type="submit" className="text-sm flex items-center px-3 py-1 text-white bg-gray-800 rounded-full outline-none md:px-4 hover:bg-gray-700 focus:outline-none active:outline-none">
-                          <svg aria-hidden="true" data-prefix="fas" data-icon="gift" className="w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 448c0 17.7 14.3 32 32 32h160V320H32v128zm256 32h160c17.7 0 32-14.3 32-32V320H288v160zm192-320h-42.1c6.2-12.1 10.1-25.5 10.1-40 0-48.5-39.5-88-88-88-41.6 0-68.5 21.3-103 68.3-34.5-47-61.4-68.3-103-68.3-48.5 0-88 39.5-88 88 0 14.5 3.8 27.9 10.1 40H32c-17.7 0-32 14.3-32 32v80c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16v-80c0-17.7-14.3-32-32-32zm-326.1 0c-22.1 0-40-17.9-40-40s17.9-40 40-40c19.9 0 34.6 3.3 86.1 80h-86.1zm206.1 0h-86.1c51.4-76.5 65.7-80 86.1-80 22.1 0 40 17.9 40 40s-17.9 40-40 40z" /></svg>
+                          <svg aria-hidden="" data-prefix="fas" data-icon="gift" className="w-8" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="currentColor" d="M32 448c0 17.7 14.3 32 32 32h160V320H32v128zm256 32h160c17.7 0 32-14.3 32-32V320H288v160zm192-320h-42.1c6.2-12.1 10.1-25.5 10.1-40 0-48.5-39.5-88-88-88-41.6 0-68.5 21.3-103 68.3-34.5-47-61.4-68.3-103-68.3-48.5 0-88 39.5-88 88 0 14.5 3.8 27.9 10.1 40H32c-17.7 0-32 14.3-32 32v80c0 8.8 7.2 16 16 16h480c8.8 0 16-7.2 16-16v-80c0-17.7-14.3-32-32-32zm-326.1 0c-22.1 0-40-17.9-40-40s17.9-40 40-40c19.9 0 34.6 3.3 86.1 80h-86.1zm206.1 0h-86.1c51.4-76.5 65.7-80 86.1-80 22.1 0 40 17.9 40 40s-17.9 40-40 40z" /></svg>
                           <span className="font-medium">Apply coupon</span>
                         </button>
                       </div>
@@ -130,7 +153,7 @@ function MyCart() {
                   </div>
                   <div className="flex justify-between pt-4 border-b">
                     <div className="flex lg:px-4 lg:py-2 m-2 text-lg lg:text-xl font-bold text-gray-800">
-                      <form action method="POST">
+                      <form method="POST">
                         <button type="submit" className="mr-2 mt-1 lg:mt-2">
                           <svg aria-hidden="true" data-prefix="far" data-icon="trash-alt" className="w-4 text-red-600 hover:text-red-800" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path fill="currentColor" d="M268 416h24a12 12 0 0012-12V188a12 12 0 00-12-12h-24a12 12 0 00-12 12v216a12 12 0 0012 12zM432 80h-82.41l-34-56.7A48 48 0 00274.41 0H173.59a48 48 0 00-41.16 23.3L98.41 80H16A16 16 0 000 96v16a16 16 0 0016 16h16v336a48 48 0 0048 48h288a48 48 0 0048-48V128h16a16 16 0 0016-16V96a16 16 0 00-16-16zM171.84 50.91A6 6 0 01177 48h94a6 6 0 015.15 2.91L293.61 80H154.39zM368 464H80V128h288zm-212-48h24a12 12 0 0012-12V188a12 12 0 00-12-12h-24a12 12 0 00-12 12v216a12 12 0 0012 12z" /></svg>
                         </button>

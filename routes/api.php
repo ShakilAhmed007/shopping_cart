@@ -24,3 +24,5 @@ Route::get('/', [ProductController::class, 'index']);
 Route::post('/add-to-cart', [ProductController::class, 'addToCart']);
 Route::get('/count-cart-items', [ProductController::class, 'CountCartItems']);
 Route::get('/cart-items', [ProductController::class, 'cartItems']);
+Route::put('/cart-item-increment', [ProductController::class, 'cartItemIncrement']);
+Route::put('/cart-item-dcrement', [ProductController::class, 'cartItemDcrement']);
